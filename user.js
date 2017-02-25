@@ -14,7 +14,7 @@ let userSchema = new mongoose.Schema({
   }
   
 },{
-  timestamps: true,
+  timestamps: true
   }
 );
 
