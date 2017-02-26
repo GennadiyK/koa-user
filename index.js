@@ -25,23 +25,8 @@ const Koa = require('koa');
 const app = new Koa();
 const router = require('koa-router')();
 const mongoose = require('./mongoose');
+const bodyParser = require('koa-bodyparser');
 const User = require('./user');
-
-
-(async () => {
-  try {
-    await User.remove();
-    
-    let mary = await User.create({
-      name: 'mary',
-      email: 'user@tut.by'
-    });
-    await mary.save();
-  } catch(err) {
-    console.log(err);
-  }
- 
-})();
 
 
 router.get('/users/:id', async (ctx) => {
@@ -53,5 +38,20 @@ router.get('/users/:id', async (ctx) => {
   }
 });
 
+router.post('/users', async (ctx) => {
+ console.log(ctx.request.body);
+  await User.create({
+    name: ctx.request.body.name,
+    email: ctx.request.body.email
+  });
+
+  ctx.body = 'ok';
+});
+
+router.del('/users/:id', async (ctx) => {
+  ctx.body = ctx.params;
+});
+
+app.use(bodyParser());
 app.use(router.routes());
 app.listen(3000);
