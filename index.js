@@ -40,18 +40,29 @@ router.get('/users/:id', async (ctx) => {
 
 router.post('/users', async (ctx) => {
  console.log(ctx.request.body);
-  await User.create({
+ let user =  await User.create({
     name: ctx.request.body.name,
     email: ctx.request.body.email
   });
-
+  console.log(user);
   ctx.body = 'ok';
 });
 
 router.del('/users/:id', async (ctx) => {
-  ctx.body = ctx.params;
-});
+  try {
 
+    await User.remove({_id: ctx.params.id}, function (err) {
+      if (err) {
+        console.log(err);
+      }
+      ctx.body = 'deleted';
+    });
+
+  } catch(err) {
+    console.log(err);
+  }
+});
+ 
 app.use(bodyParser());
 app.use(router.routes());
 app.listen(3000);
