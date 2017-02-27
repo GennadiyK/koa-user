@@ -30,8 +30,13 @@ const User = require('./user');
 
 
 router.get('/users/:id', async (ctx) => {
+  let id = mongoose.Types.ObjectId();
+  console.log(id);
   try {
     let user = await User.findOne({_id: ctx.params.id});
+    if(user === null) {
+      ctx.throw(404)
+    }
     ctx.body = user;
   } catch(err) {
     console.log(err);
@@ -50,14 +55,8 @@ router.post('/users', async (ctx) => {
 
 router.del('/users/:id', async (ctx) => {
   try {
-
-    await User.remove({_id: ctx.params.id}, function (err) {
-      if (err) {
-        console.log(err);
-      }
-      ctx.body = 'deleted';
-    });
-
+    await User.remove({_id: ctx.params.id});
+    ctx.body = 'deleted';
   } catch(err) {
     console.log(err);
   }
