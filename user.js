@@ -1,7 +1,7 @@
 const mongoose = require('./mongoose');
 let userSchema = new mongoose.Schema({
   //User имеет уникальный email, а также даты создания и модификации и имя displayName.
-  name: {
+  displayName: {
     type: String,
     lowercase: true
   },
