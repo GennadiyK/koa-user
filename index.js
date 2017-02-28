@@ -28,8 +28,8 @@ const User = require('./user');
 
 //1. GET /users/:id - получить юзера по id, например: /users/57ffe7300b863737ddfe9a39 - DONE
 router.get('/users/:id', async (ctx) => {
-  // let id = mongoose.Types.ObjectId();
-  // console.log(id);
+  let id = mongoose.Types.ObjectId();
+  console.log(id);
   try {
     let user = await User.findOne({_id: ctx.params.id});
     
@@ -74,8 +74,11 @@ router.post('/users', async (ctx) => {
 
 router.patch('/users/:id', async (ctx) => {
   try {
-    let user = await User.findOne({_id: ctx.params.id});
-    ctx.body = user;
+    let user = await User.findOneAndUpdate({_id: ctx.params.id}, {email: ctx.request.body.email, displayName: ctx.request.body.displayName});
+    if(user === null) {
+      ctx.throw(404);
+    }
+    ctx.body = 'ok';
   } catch (err) {
     console.log(err);
   }
